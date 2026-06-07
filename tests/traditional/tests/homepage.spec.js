@@ -6,7 +6,7 @@ const { test, expect } = require('@playwright/test');
  * Tests for the main landing page of TechMart
  */
 
-test.describe('Homepage', () => {
+test.describe('Homepage', () => { //test.describe groups all tests together under the "Homepage" label
   
   test.beforeEach(async ({ page }) => {
     // Clear cart before each test for consistent state
@@ -104,4 +104,16 @@ test.describe('Homepage', () => {
     await expect(authArea.locator('text=Sign Up')).toBeVisible();
   });
 
-});
+  test('should filter products when searching', async ({ page }) => {
+    const searchInput = page.locator('#searchInput');
+    await searchInput.fill('Keyboard');
+    await page.locator('#searchBtn').click();
+    await page.waitForTimeout(500);
+
+    const products = page.locator('.product-card');
+    await expect(products).toHaveCount(1);
+
+    await expect(page.locator('.product-info h3')).toContainText('Keyboard');
+  });
+
+  });
